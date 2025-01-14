@@ -18,6 +18,7 @@ namespace AnimeApp.Application.Common.Mappings
             CreateMap<CreateAnimeShowCommand, AnimeShow>();
             CreateMap<GetAnimeShowByIdQuery, AnimeShowDTO>();
             CreateMap<AnimeShow, AnimeShowDTO>();
+            CreateMap<AnimeShow, BaseAnimeShowDTO>();
         }
     }
 }

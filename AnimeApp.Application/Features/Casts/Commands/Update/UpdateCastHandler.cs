@@ -37,7 +37,7 @@ namespace AnimeApp.Application.Features.Casts.Commands.Update
 
                 await _unitOfWork.Casts.UpdateAsync(cast);
                 await _unitOfWork.SaveChangesAsync();
-                return false;
+                return true;
             }
             catch (ArgumentException ex)
             {

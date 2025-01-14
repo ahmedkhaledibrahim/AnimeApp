@@ -35,6 +35,7 @@ namespace AnimeApp.Application.Features.Categories.Queries.Get
                 var categoryAnimeShows =  _unitOfWork.AnimeShows.GetAllAsync().Where(a => a.CategoryId == request.Id).ToList();
 
                 category.AnimeShows = categoryAnimeShows;
+
                 return _mapper.Map<CategoryDTO>(category);
 
             }

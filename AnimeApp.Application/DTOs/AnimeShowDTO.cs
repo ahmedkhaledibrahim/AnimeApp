@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.DTOs
 {
-    public class AnimeShowDTO
-    {
+    public class BaseAnimeShowDTO {
         public int Id { get; set; }
         public string Title { get; set; }
         public double Rating { get; set; }
@@ -16,6 +15,9 @@ namespace AnimeApp.Application.DTOs
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime? ReleaseDate { get; set; }
-        public ICollection<Cast>? Casts { get; set; }
+    }
+    public class AnimeShowDTO : BaseAnimeShowDTO
+    {
+        public ICollection<CastDTO>? Casts { get; set; }
     }
 }

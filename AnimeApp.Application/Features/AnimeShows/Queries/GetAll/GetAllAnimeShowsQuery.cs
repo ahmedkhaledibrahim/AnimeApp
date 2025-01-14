@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
 {
-    public class GetAllAnimeShowsQuery : IRequest<PaginatedResult<AnimeShowDTO>>
+    public class GetAllAnimeShowsQuery : IRequest<PaginatedResult<BaseAnimeShowDTO>>
     {
         public int? CategoryId { get; set; }
         public string? Title { get; set; }

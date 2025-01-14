@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.Features.Categories.Queries.GetAll
 {
-    public class GetAllCategoriesQuery : IRequest<IEnumerable<CategoryDTO>>
+    public class GetAllCategoriesQuery : IRequest<IEnumerable<BaseCategoryDTO>>
     {
     }
 }

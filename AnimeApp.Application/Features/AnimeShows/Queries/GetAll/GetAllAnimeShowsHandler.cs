@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
 {
-    public class GetAllAnimeShowsHandler : IRequestHandler<GetAllAnimeShowsQuery, PaginatedResult<AnimeShowDTO>>
+    public class GetAllAnimeShowsHandler : IRequestHandler<GetAllAnimeShowsQuery, PaginatedResult<BaseAnimeShowDTO>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<PaginatedResult<AnimeShowDTO>> Handle(GetAllAnimeShowsQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<BaseAnimeShowDTO>> Handle(GetAllAnimeShowsQuery request, CancellationToken cancellationToken)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
 
                 if (!string.IsNullOrEmpty(request.Title))
                 {
-                    animeShows = animeShows.Where(a => a.Title.Contains(request.Title));
+                    animeShows = animeShows.Where(a => a.Title.ToLower().Contains(request.Title.ToLower()));
                 }
                 if (request.MinimumRate != null && request.MinimumRate > 0.0)
                 {
@@ -49,9 +49,9 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
                     .Take(request.PageSize)
                     .ToList();
 
-                return new PaginatedResult<AnimeShowDTO>()
+                return new PaginatedResult<BaseAnimeShowDTO>()
                 {
-                    Items = _mapper.Map<IEnumerable<AnimeShowDTO>>(items),
+                    Items = _mapper.Map<IEnumerable<BaseAnimeShowDTO>>(items),
                     PageNumber = request.PageNumber,
                     PageSize = request.PageSize,
                     TotalCount = totalCount,

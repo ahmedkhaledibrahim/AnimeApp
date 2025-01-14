@@ -28,8 +28,11 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.Get
                 {
                     throw new ArgumentException($"No Anime Show found with ID: {request.Id}");
                 }
+                var animeShowCasts =  _unitOfWork.Casts.GetAllAsync().Where(c => c.AnimeShowId == animeShow.Id).ToList();
+                animeShow.Casts = animeShowCasts;
                 return _mapper.Map<AnimeShowDTO>(animeShow);
-            }catch(ArgumentException ex)
+            }
+            catch(ArgumentException ex)
             {
                 throw;
             }

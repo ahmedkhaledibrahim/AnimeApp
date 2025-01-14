@@ -16,6 +16,7 @@ namespace AnimeApp.Application.Common.Mappings
         {
             CreateMap<CreateCategoryCommand, Category>();     
             CreateMap<Category, CategoryDTO>();     
+            CreateMap<Category, BaseCategoryDTO>();     
             CreateMap<CategoryDTO, Category>();     
         }
     }

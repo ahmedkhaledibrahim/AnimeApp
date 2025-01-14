@@ -33,7 +33,7 @@ namespace AnimeApp.Application.Features.Categories.Commands.Delete
             }
             catch (ArgumentException ex)
             {
-                return false;
+                throw;
 
             }
             catch (Exception ex)

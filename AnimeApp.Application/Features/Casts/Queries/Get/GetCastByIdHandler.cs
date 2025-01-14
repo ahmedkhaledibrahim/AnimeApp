@@ -29,7 +29,7 @@ namespace AnimeApp.Application.Features.Casts.Queries.Get
                 {
                     throw new ArgumentException($"No Cast found with ID: {request.Id}");
                 }
-                return _mapper.Map<CastDTO>(request);
+                return _mapper.Map<CastDTO>(cast);
             }
             catch (ArgumentException ex)
             {
