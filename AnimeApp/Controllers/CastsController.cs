@@ -59,7 +59,7 @@ namespace AnimeApp.Presentation.Controllers
         }
 
         [HttpDelete("Delete")]
-        public async Task<ActionResult<bool>> DeleteCast([FromBody] DeleteCastCommand query)
+        public async Task<ActionResult<bool>> DeleteCast([FromQuery] DeleteCastCommand query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

@@ -32,7 +32,7 @@ namespace AnimeApp.Application.Features.Categories.Queries.Get
                 {
                     throw new ArgumentException($"No Category found with ID: {request.Id}");
                 }
-                var categoryAnimeShows =  _unitOfWork.AnimeShows.GetAllAsync().Where(a => a.CategoryId == request.Id).ToList();
+                var categoryAnimeShows =  _unitOfWork.AnimeShows.GetAll().Where(a => a.CategoryId == request.Id).ToList();
 
                 category.AnimeShows = categoryAnimeShows;
 

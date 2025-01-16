@@ -26,7 +26,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
         {
             try
             {
-                var animeShows =  _unitOfWork.AnimeShows.GetAllAsync();
+                var animeShows =  _unitOfWork.AnimeShows.GetAll();
 
                 if (!string.IsNullOrEmpty(request.Title))
                 {

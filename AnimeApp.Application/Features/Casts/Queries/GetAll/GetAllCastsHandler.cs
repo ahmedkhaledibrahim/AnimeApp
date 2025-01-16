@@ -23,7 +23,7 @@ namespace AnimeApp.Application.Features.Casts.Queries.GetAll
         public async Task<IEnumerable<CastDTO>> Handle(GetAllCastsQuery request, CancellationToken cancellationToken)
         {
             try {
-                var casts =  _unitOfWork.Casts.GetAllAsync();
+                var casts =  _unitOfWork.Casts.GetAll();
                 var items = casts.ToList();
                 return _mapper.Map<IEnumerable<CastDTO>>(items);
 

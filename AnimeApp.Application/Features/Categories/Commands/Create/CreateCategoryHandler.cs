@@ -4,6 +4,7 @@ using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,12 @@ namespace AnimeApp.Application.Features.Categories.Commands.Create
         {
             try
             {
+                var existingCategory = await _unitOfWork.Categories.GetByPropertyValueAsync("Name", request.Name);
+
+                if (existingCategory != null)
+                {
+                    throw new ValidationException("There is category with the same name");
+                }
                 var category = _mapper.Map<Category>(request);
 
                 await _unitOfWork.Categories.AddAsync(category);
@@ -31,6 +38,10 @@ namespace AnimeApp.Application.Features.Categories.Commands.Create
                 await _unitOfWork.SaveChangesAsync();
                 
                 return category.Id;
+            }
+            catch (ValidationException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {

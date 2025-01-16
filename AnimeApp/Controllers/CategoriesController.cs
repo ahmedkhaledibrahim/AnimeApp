@@ -59,7 +59,7 @@ namespace AnimeApp.Presentation.Controllers
         }
 
         [HttpDelete("Delete")]
-        public async Task<ActionResult<bool>> DeleteCategory([FromBody] DeleteCategoryCommand query)
+        public async Task<ActionResult<bool>> DeleteCategory([FromQuery] DeleteCategoryCommand query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

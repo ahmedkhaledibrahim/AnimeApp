@@ -24,7 +24,7 @@ namespace AnimeApp.Application.Features.Categories.Queries.GetAll
         {
             try
             {
-                var categories =  _unitOfWork.Categories.GetAllAsync();
+                var categories =  _unitOfWork.Categories.GetAll();
                 var items = categories.ToList();
                 return _mapper.Map<IEnumerable<BaseCategoryDTO>>(items);
 
