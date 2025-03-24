@@ -36,6 +36,7 @@ namespace AnimeApp.Presentation.Middlewares
             {
                 ArgumentException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status400BadRequest,
+                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
 

@@ -4,6 +4,7 @@ using AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResu
 using AnimeApp.Domain.Interfaces;
 using AnimeApp.Infrastructure.Data;
 using AnimeApp.Infrastructure.Repositories;
+using AnimeApp.Infrastructure.Services.Authentication;
 using AnimeApp.Presentation.Middlewares;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,9 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
+builder.Services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseMiddleware<ApiKeyValidatorMiddleware>();
 
 app.UseHttpsRedirection();
 
