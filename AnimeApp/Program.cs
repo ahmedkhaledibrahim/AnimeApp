@@ -1,9 +1,11 @@
 using AnimeApp.Application.Common.Mappings;
 using AnimeApp.Application.Features.AnimeShows.Commands.Create;
+using AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult;
 using AnimeApp.Domain.Interfaces;
 using AnimeApp.Infrastructure.Data;
 using AnimeApp.Infrastructure.Repositories;
 using AnimeApp.Presentation.Middlewares;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -25,6 +27,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreateAnimeShowHandlerWithGR).Assembly);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateAnimeShowCommand).Assembly));
 

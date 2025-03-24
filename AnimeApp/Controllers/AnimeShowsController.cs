@@ -1,10 +1,12 @@
 ﻿using AnimeApp.Application.DTOs;
 using AnimeApp.Application.Features.AnimeShows.Commands.Create;
+using AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult;
 using AnimeApp.Application.Features.AnimeShows.Commands.Delete;
 using AnimeApp.Application.Features.AnimeShows.Commands.Update;
 using AnimeApp.Application.Features.AnimeShows.Queries.Get;
 using AnimeApp.Application.Features.AnimeShows.Queries.GetAll;
 using AnimeApp.Domain.Common;
+using Ardalis.Result;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +46,24 @@ namespace AnimeApp.Presentation.Controllers
         {
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [HttpPost("CreateWithResultPattern")]
+        public async Task<ActionResult<int>> CreateAnimeShow([FromBody] CreateAnimeShowCommandWithGR query)
+        {
+            var result = await _mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+            else if (result.IsInvalid())
+            {
+                return BadRequest(new { Errors = result.ValidationErrors });
+            }
+            else {
+                return BadRequest();
+            }
         }
 
         [HttpPut("Update")]

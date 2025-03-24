@@ -1,5 +1,6 @@
 ﻿using AnimeApp.Application.DTOs;
 using AnimeApp.Application.Features.AnimeShows.Commands.Create;
+using AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult;
 using AnimeApp.Application.Features.AnimeShows.Queries.Get;
 using AnimeApp.Domain.Entities;
 using AutoMapper;
@@ -16,6 +17,7 @@ namespace AnimeApp.Application.Common.Mappings
         public AnimeShowProfile()
         {
             CreateMap<CreateAnimeShowCommand, AnimeShow>();
+            CreateMap<CreateAnimeShowCommandWithGR, AnimeShow>();
             CreateMap<GetAnimeShowByIdQuery, AnimeShowDTO>();
             CreateMap<AnimeShow, AnimeShowDTO>();
             CreateMap<AnimeShow, BaseAnimeShowDTO>();
