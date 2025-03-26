@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.Features.AnimeShows.Commands.Delete;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using MediatR;
 using System;
@@ -21,12 +22,12 @@ namespace AnimeApp.Application.Features.Casts.Commands.Delete
         {
             try
             {
-                var cast = await _unitOfWork.Casts.GetByIdAsync(request.Id);
+                var cast = await _unitOfWork.GetRepository<Cast>().GetByIdAsync(request.Id);
                 if (cast == null)
                 {
                     throw new ArgumentException($"No Cast found with ID: {request.Id}");
                 }
-                await _unitOfWork.Casts.DeleteByIdAsync(request.Id);
+                await _unitOfWork.GetRepository<Cast>().DeleteByIdAsync(request.Id);
                 await _unitOfWork.SaveChangesAsync();
                 return true;
             }

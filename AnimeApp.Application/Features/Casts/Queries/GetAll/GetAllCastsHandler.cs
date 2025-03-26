@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.DTOs;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -23,7 +24,7 @@ namespace AnimeApp.Application.Features.Casts.Queries.GetAll
         public async Task<IEnumerable<CastDTO>> Handle(GetAllCastsQuery request, CancellationToken cancellationToken)
         {
             try {
-                var casts =  _unitOfWork.Casts.GetAll();
+                var casts =  _unitOfWork.GetRepository<Cast>().GetAll();
                 var items = casts.ToList();
                 return _mapper.Map<IEnumerable<CastDTO>>(items);
 

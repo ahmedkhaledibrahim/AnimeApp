@@ -1,5 +1,10 @@
-﻿using AnimeApp.Domain.Interfaces;
+﻿using AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult;
+using AnimeApp.Application.MediatrGenerics;
+using AnimeApp.Domain.Entities;
+using AnimeApp.Domain.Interfaces;
+using Ardalis.Result;
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,27 +14,40 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.Features.AnimeShows.Commands.Update
 {
-    public class UpdateAnimeShowHandler : IRequestHandler<UpdateAnimeShowCommand, bool>
+    public class UpdateAnimeShowHandler(IValidator<UpdateAnimeShowCommand> _validator, IUnitOfWork unitOfWork, IMapper mapper) : ICommandHandler<AnimeShow,UpdateAnimeShowCommand, bool>(unitOfWork, mapper)
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UpdateAnimeShowHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-        public async Task<bool> Handle(UpdateAnimeShowCommand request, CancellationToken cancellationToken)
+        
+        public override async Task<Result<bool>> Handle(UpdateAnimeShowCommand request, CancellationToken cancellationToken)
         {
             try {
-
-                var animeShow = await _unitOfWork.AnimeShows.GetByIdAsync(request.Id);
+                var validationResult = _validator.Validate(request);
+                if (!validationResult.IsValid)
+                {
+                    return Result<bool>.Invalid(validationErrors: validationResult.Errors.Select(e => new ValidationError
+                    {
+                        ErrorCode = e.ErrorCode,
+                        ErrorMessage = e.ErrorMessage,
+                        Identifier = e.PropertyName
+                    }).ToList());
+                }
+                var animeShow = await unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.Id);
                 if (animeShow == null)
                 {
-                    throw new ArgumentException($"No Anime Show found with ID: {request.Id}");
+                    return Result.Invalid(new ValidationError() { 
+                      ErrorCode = "NotFound",
+                      ErrorMessage = $"No Anime Show found with ID: {request.Id}",
+                      Identifier = "Id",
+                    });
                 }
-                var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId);
+                var category = await unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.CategoryId);
                 if (category == null)
                 {
-                    throw new ArgumentException($"No Category found with ID: {request.CategoryId}");
+                    return Result.Invalid(new ValidationError()
+                    {
+                        ErrorCode = "NotFound",
+                        ErrorMessage = $"No Category found with ID: {request.CategoryId}",
+                        Identifier = "Category Id",
+                    });
                 }
 
                 animeShow.Title = request.Title;
@@ -39,20 +57,20 @@ namespace AnimeApp.Application.Features.AnimeShows.Commands.Update
                 animeShow.ReleaseDate = request.ReleaseDate;
                 animeShow.ImageUrl = request.ImageUrl;
 
-                await _unitOfWork.AnimeShows.UpdateAsync(animeShow);
+                await unitOfWork.GetRepository<AnimeShow>().UpdateAsync(animeShow);
 
-                await _unitOfWork.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
 
-                return true;
+                return Result.Success(true);
             }
             catch (ArgumentException ex)
             {
-                throw;
+                return Result.Error(ex.Message);
 
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred while processing your request. Please try again later.", ex);
+                return Result.Error(ex.Message);
             }
         }
     }

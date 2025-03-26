@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.DTOs;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -23,12 +24,12 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.Get
         public async Task<AnimeShowDTO> Handle(GetAnimeShowByIdQuery request, CancellationToken cancellationToken)
         {
             try {
-                var animeShow = await _unitOfWork.AnimeShows.GetByIdAsync(request.Id);
+                var animeShow = await _unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.Id);
                 if (animeShow == null)
                 {
                     throw new ArgumentException($"No Anime Show found with ID: {request.Id}");
                 }
-                var animeShowCasts =  _unitOfWork.Casts.GetAll().Where(c => c.AnimeShowId == animeShow.Id).ToList();
+                var animeShowCasts =  _unitOfWork.GetRepository<Cast>().GetAll().Where(c => c.AnimeShowId == animeShow.Id).ToList();
                 animeShow.Casts = animeShowCasts;
                 return _mapper.Map<AnimeShowDTO>(animeShow);
             }

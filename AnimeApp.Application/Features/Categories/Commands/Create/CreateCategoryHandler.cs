@@ -25,7 +25,7 @@ namespace AnimeApp.Application.Features.Categories.Commands.Create
         {
             try
             {
-                var existingCategory = await _unitOfWork.Categories.GetByPropertyValueAsync("Name", request.Name);
+                var existingCategory = await _unitOfWork.GetRepository<Category>().GetByPropertyValueAsync("Name", request.Name);
 
                 if (existingCategory != null)
                 {
@@ -33,7 +33,7 @@ namespace AnimeApp.Application.Features.Categories.Commands.Create
                 }
                 var category = _mapper.Map<Category>(request);
 
-                await _unitOfWork.Categories.AddAsync(category);
+                await _unitOfWork.GetRepository<Category>().AddAsync(category);
 
                 await _unitOfWork.SaveChangesAsync();
                 

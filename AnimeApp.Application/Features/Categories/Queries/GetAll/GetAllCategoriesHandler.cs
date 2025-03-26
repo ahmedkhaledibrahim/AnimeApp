@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.DTOs;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -24,7 +25,7 @@ namespace AnimeApp.Application.Features.Categories.Queries.GetAll
         {
             try
             {
-                var categories =  _unitOfWork.Categories.GetAll();
+                var categories =  _unitOfWork.GetRepository<Category>().GetAll();
                 var items = categories.ToList();
                 return _mapper.Map<IEnumerable<BaseCategoryDTO>>(items);
 

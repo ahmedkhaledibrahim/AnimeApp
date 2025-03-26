@@ -62,7 +62,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseMiddleware<ApiKeyValidatorMiddleware>();
+//app.UseMiddleware<ApiKeyValidatorMiddleware>();
 
 app.UseHttpsRedirection();
 

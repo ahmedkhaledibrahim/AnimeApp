@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.DTOs;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -26,13 +27,13 @@ namespace AnimeApp.Application.Features.Categories.Queries.Get
         {
            
             try {
-                var category = await _unitOfWork.Categories.GetByIdAsync(request.Id);
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(request.Id);
                 
                 if (category == null)
                 {
                     throw new ArgumentException($"No Category found with ID: {request.Id}");
                 }
-                var categoryAnimeShows =  _unitOfWork.AnimeShows.GetAll().Where(a => a.CategoryId == request.Id).ToList();
+                var categoryAnimeShows =  _unitOfWork.GetRepository<AnimeShow>().GetAll().Where(a => a.CategoryId == request.Id).ToList();
 
                 category.AnimeShows = categoryAnimeShows;
 

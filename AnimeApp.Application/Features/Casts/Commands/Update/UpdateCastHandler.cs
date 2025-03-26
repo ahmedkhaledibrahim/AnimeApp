@@ -1,4 +1,5 @@
-﻿using AnimeApp.Domain.Interfaces;
+﻿using AnimeApp.Domain.Entities;
+using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
 using System;
@@ -21,12 +22,12 @@ namespace AnimeApp.Application.Features.Casts.Commands.Update
         public async Task<bool> Handle(UpdateCastCommand request, CancellationToken cancellationToken)
         {
             try {
-                var cast = await _unitOfWork.Casts.GetByIdAsync(request.Id);
+                var cast = await _unitOfWork.GetRepository<Cast>().GetByIdAsync(request.Id);
                 if (cast == null)
                 {
                     throw new ArgumentException($"No Cast found with ID: {request.Id}");
                 }
-                var animeShow = await _unitOfWork.AnimeShows.GetByIdAsync(request.AnimeShowId);
+                var animeShow = await _unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.AnimeShowId);
                 if (animeShow == null)
                 {
                     throw new ArgumentException($"No Anime Show found with ID: {request.Id}");
@@ -35,7 +36,7 @@ namespace AnimeApp.Application.Features.Casts.Commands.Update
                 cast.Name = request.Name;
                 cast.AnimeShowId = request.AnimeShowId;
 
-                await _unitOfWork.Casts.UpdateAsync(cast);
+                await _unitOfWork.GetRepository<Cast>().UpdateAsync(cast);
                 await _unitOfWork.SaveChangesAsync();
                 return true;
             }

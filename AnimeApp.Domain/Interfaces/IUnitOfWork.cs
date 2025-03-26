@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Domain.Entities;
+using AnimeApp.Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,8 @@ namespace AnimeApp.Domain.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<AnimeShow> AnimeShows { get; }
-        IGenericRepository<Category> Categories { get; }
-        IGenericRepository<Cast> Casts { get; }
         Task<int> SaveChangesAsync();
+
+        IGenericRepository<T> GetRepository<T>() where T : BaseEntity;
     }
 }
