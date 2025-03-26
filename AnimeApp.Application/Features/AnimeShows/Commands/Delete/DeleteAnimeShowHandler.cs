@@ -1,4 +1,7 @@
-﻿using AnimeApp.Domain.Interfaces;
+﻿using AnimeApp.Application.MediatrGenerics;
+using AnimeApp.Domain.Entities;
+using AnimeApp.Domain.Interfaces;
+using Ardalis.Result;
 using AutoMapper;
 using MediatR;
 using System;
@@ -9,37 +12,32 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Application.Features.AnimeShows.Commands.Delete
 {
-    public class DeleteAnimeShowHandler : IRequestHandler<DeleteAnimeShowCommand, bool>
+    public class DeleteAnimeShowHandler(IUnitOfWork unitOfWork, IMapper mapper): ICommandHandler<AnimeShow, DeleteAnimeShowCommand, bool>(unitOfWork,mapper)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        
 
-        public DeleteAnimeShowHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task<bool> Handle(DeleteAnimeShowCommand request, CancellationToken cancellationToken)
+        public async override Task<Result<bool>> Handle(DeleteAnimeShowCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var animeShow = await _unitOfWork.AnimeShows.GetByIdAsync(request.Id);
+                var animeShow = await _unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.Id);
                 if (animeShow == null)
                 {
-                    throw new ArgumentException($"No Anime Show found with ID: {request.Id}");
+                    return Result.NotFound("Anime Show With ID " + request.Id + " Not Found");
                 }
-                await _unitOfWork.AnimeShows.DeleteByIdAsync(request.Id);
+                await _unitOfWork.GetRepository<AnimeShow>().DeleteByIdAsync(request.Id);
                 await _unitOfWork.SaveChangesAsync();
 
-                return true;
+                return Result.Success(true);
             }
             catch (ArgumentException ex)
             {
-                throw;
+               return Result.Error(ex.Message);
 
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("An error occurred while processing your request. Please try again later.", ex);
+                return Result.Error(ex.Message);
             }
         }
     }

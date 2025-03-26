@@ -2,14 +2,15 @@
 
 namespace AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult
 {
-    public class CreateAnimeShowCommandWithGRValidator : AbstractValidator<CreateAnimeShowCommandWithGR>
+    public class CreateAnimeShowValidatorWithGR : AbstractValidator<CreateAnimeShowCommandWithGR>
     {
-        public CreateAnimeShowCommandWithGRValidator()
+        public CreateAnimeShowValidatorWithGR()
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .MinimumLength(3)
                 .MaximumLength(100);
+            RuleFor(x => x.CategoryId).NotEmpty().GreaterThan(0);
 
             RuleFor(x => x.Description).NotEmpty().MaximumLength(500);
         }

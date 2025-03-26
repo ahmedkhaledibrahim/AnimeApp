@@ -23,14 +23,14 @@ namespace AnimeApp.Application.Features.Casts.Commands.Create
         public async Task<int> Handle(CreateCastCommand request, CancellationToken cancellationToken)
         {
             try {
-                var animeShow = await _unitOfWork.AnimeShows.GetByIdAsync(request.AnimeShowId);
+                var animeShow = await _unitOfWork.GetRepository<AnimeShow>().GetByIdAsync(request.AnimeShowId);
                 if (animeShow == null)
                 {
                     throw new ArgumentException($"Anime Show With ID : {request.AnimeShowId} Not Found");
                 }
                 var cast = _mapper.Map<Cast>(request);
 
-                await _unitOfWork.Casts.AddAsync(cast);
+                await _unitOfWork.GetRepository<Cast>().AddAsync(cast);
 
                 await _unitOfWork.SaveChangesAsync();
 

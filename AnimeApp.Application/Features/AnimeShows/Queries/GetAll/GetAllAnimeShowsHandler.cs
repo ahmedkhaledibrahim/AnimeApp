@@ -1,5 +1,6 @@
 ﻿using AnimeApp.Application.DTOs;
 using AnimeApp.Domain.Common;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -26,7 +27,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Queries.GetAll
         {
             try
             {
-                var animeShows =  _unitOfWork.AnimeShows.GetAll();
+                var animeShows =  _unitOfWork.GetRepository<AnimeShow>().GetAll();
 
                 if (!string.IsNullOrEmpty(request.Title))
                 {

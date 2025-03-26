@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.DTOs;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using AutoMapper;
 using MediatR;
@@ -24,7 +25,7 @@ namespace AnimeApp.Application.Features.Casts.Queries.Get
         {
             try
             {
-                var cast = await _unitOfWork.Casts.GetByIdAsync(request.Id);
+                var cast = await _unitOfWork.GetRepository<Cast>().GetByIdAsync(request.Id);
                 if (cast == null)
                 {
                     throw new ArgumentException($"No Cast found with ID: {request.Id}");

@@ -1,4 +1,5 @@
 ﻿using AnimeApp.Application.Features.AnimeShows.Commands.Delete;
+using AnimeApp.Domain.Entities;
 using AnimeApp.Domain.Interfaces;
 using MediatR;
 using System;
@@ -22,12 +23,12 @@ namespace AnimeApp.Application.Features.Categories.Commands.Delete
         {
             try
             {
-                var category = await _unitOfWork.Categories.GetByIdAsync(request.Id);
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(request.Id);
                 if (category == null)
                 {
                     throw new ArgumentException($"No Category found with ID: {request.Id}");
                 }
-                await _unitOfWork.Categories.DeleteByIdAsync(request.Id);
+                await _unitOfWork.GetRepository<Category>().DeleteByIdAsync(request.Id);
                 await _unitOfWork.SaveChangesAsync();
                 return true;
             }

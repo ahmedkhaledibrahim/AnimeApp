@@ -1,4 +1,5 @@
-﻿using AnimeApp.Domain.Interfaces;
+﻿using AnimeApp.Domain.Entities.Common;
+using AnimeApp.Domain.Interfaces;
 using AnimeApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AnimeApp.Infrastructure.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;

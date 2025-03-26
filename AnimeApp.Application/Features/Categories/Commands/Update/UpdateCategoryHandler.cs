@@ -1,4 +1,5 @@
-﻿using AnimeApp.Domain.Interfaces;
+﻿using AnimeApp.Domain.Entities;
+using AnimeApp.Domain.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace AnimeApp.Application.Features.Categories.Commands.Update
 
             try
             {
-                var category = await _unitOfWork.Categories.GetByIdAsync(request.Id);
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(request.Id);
 
                 if (category == null)
                 {
@@ -32,7 +33,7 @@ namespace AnimeApp.Application.Features.Categories.Commands.Update
                 category.Description = request.Description;
                 category.Name = request.Name;
 
-                await _unitOfWork.Categories.UpdateAsync(category);
+                await _unitOfWork.GetRepository<Category>().UpdateAsync(category);
 
                 await _unitOfWork.SaveChangesAsync();
 

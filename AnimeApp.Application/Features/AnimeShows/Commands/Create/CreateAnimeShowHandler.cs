@@ -27,7 +27,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Commands.Create
         {
             try
             {
-                var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId);
+                var category = await _unitOfWork.GetRepository<Category>().GetByIdAsync(request.CategoryId);
 
                 if (category == null)
                 {
@@ -35,7 +35,7 @@ namespace AnimeApp.Application.Features.AnimeShows.Commands.Create
                 }
                 var animeShow = _mapper.Map<AnimeShow>(request);
 
-                await _unitOfWork.AnimeShows.AddAsync(animeShow);
+                await _unitOfWork.GetRepository<AnimeShow>().AddAsync(animeShow);
 
                 await _unitOfWork.SaveChangesAsync();
                 return animeShow.Id;

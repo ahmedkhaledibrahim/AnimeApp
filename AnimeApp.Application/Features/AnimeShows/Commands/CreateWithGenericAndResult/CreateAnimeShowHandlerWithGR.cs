@@ -4,23 +4,22 @@ using AnimeApp.Domain.Interfaces;
 using Ardalis.Result;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 
 namespace AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAndResult
 {
-    public class CreateAnimeShowHandlerWithGR : ICommandHandler<CreateAnimeShowCommandWithGR, int>
+    public class CreateAnimeShowHandlerWithGR
+        : ICommandHandler<AnimeShow,CreateAnimeShowCommandWithGR, int>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+       
         private readonly IValidator<CreateAnimeShowCommandWithGR> _validator;
-
-        public CreateAnimeShowHandlerWithGR(IUnitOfWork unitOfWork, IMapper mapper, IValidator<CreateAnimeShowCommandWithGR> validator)
+        public CreateAnimeShowHandlerWithGR(IValidator<CreateAnimeShowCommandWithGR> validator, IUnitOfWork unitOfWork, IMapper mapper) 
+            : base(unitOfWork,mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _validator = validator;
         }
 
-        public async Task<Result<int>> Handle(CreateAnimeShowCommandWithGR request, CancellationToken cancellationToken)
+        public override async Task<Result<int>> Handle(CreateAnimeShowCommandWithGR request, CancellationToken cancellationToken)
         {
             try {
                 var validationResult = _validator.Validate(request);
@@ -35,11 +34,12 @@ namespace AnimeApp.Application.Features.AnimeShows.Commands.CreateWithGenericAnd
                 }
                 var animeShow = _mapper.Map<AnimeShow>(request);
 
-                await _unitOfWork.AnimeShows.AddAsync(animeShow);
+                await _unitOfWork.GetRepository<AnimeShow>().AddAsync(animeShow);
                 await _unitOfWork.SaveChangesAsync();
 
                 return Result.Success<int>(animeShow.Id);
-            } catch (Exception ex) { 
+            }
+            catch (Exception ex) { 
                 return Result.Error(errorMessage: ex.Message);
             }
             
